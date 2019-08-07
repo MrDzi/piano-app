@@ -7,10 +7,23 @@ new MongoMemoryServer({ instance: { port: 27017 } });
 
 // this API is just an example, you can modify any parts if needed for the task
 const typeDefs = gql`
+    type Event {
+        note: Int
+        startTime: Int
+        endTime: Int
+    }
+
+    input EventInput {
+        note: Int
+        startTime: Int
+        endTime: Int
+    }
+
     type Song {
         _id: ID!
         title: String
-        keyStrokes: [String]
+        duration: Int
+        events: [Event]
     }
 
     type Query {
@@ -18,7 +31,7 @@ const typeDefs = gql`
     }
 
     type Mutation {
-        addSong(title: String, keyStrokes: [String]): Song
+        addSong(title: String, events: [EventInput], duration: Int): Song
     }
 `;
 
@@ -33,10 +46,10 @@ const resolvers = {
         },
     },
     Mutation: {
-        addSong: async (_, { title, keyStrokes }) => {
+        addSong: async (_, { title, events, duration }) => {
             const mongodb = await getMongoConnection();
             try {
-                const response = await mongodb.collection("songs").insertOne({ title, keyStrokes });
+                const response = await mongodb.collection("songs").insertOne({ title, events, duration });
                 return mongodb.collection("songs").findOne({ _id: response.insertedId });
             } catch (e) {
                 console.error(e);
