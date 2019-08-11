@@ -7,7 +7,7 @@ export const removeNote = (activeNotes, note) => {
     return notes;
 };
 
-const toDoubleDigit = number => (number < 10 ? "0" + number : number);
+export const toDoubleDigit = number => (number < 10 ? "0" + number : number.toString());
 
 export const formatTime = miliseconds => {
     const date = new Date(miliseconds);
