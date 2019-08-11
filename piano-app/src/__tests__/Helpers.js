@@ -1,4 +1,4 @@
-import { toDoubleDigit, formatTime, removeNote } from "../utils/helpers";
+import { toDoubleDigit, formatTime, removeFromArray } from "../utils/helpers";
 
 describe("A Helpers suite", () => {
     it("should return double digit number converted to a string", () => {
@@ -12,12 +12,12 @@ describe("A Helpers suite", () => {
         expect(formatTime(60 * 1000)).toBe("01 : 00");
     });
 
-    it("should remove note", () => {
+    it("should return new array with removed note", () => {
         const activeNotes = [46, 47, 48];
         const note1 = 46;
-        expect(removeNote(activeNotes, note1)).toEqual([47, 48]);
+        expect(removeFromArray(activeNotes, note1)).toEqual([47, 48]);
 
         const note2 = 45;
-        expect(removeNote(activeNotes, note2)).toEqual([46, 47, 48]);
+        expect(removeFromArray(activeNotes, note2)).toEqual([46, 47, 48]);
     });
 });

@@ -5,7 +5,7 @@ import AddSongModal from "./components/AddSongModal";
 import SongsList from "./components/SongsList";
 import RecordButton from "./components/RecordButton";
 import Timer from "./components/Timer";
-import { removeNote } from "./utils/helpers";
+import { removeFromArray } from "./utils/helpers";
 import { RECORD, PLAY } from "./utils/constants";
 import "./app.scss";
 
@@ -70,26 +70,12 @@ class App extends React.PureComponent {
         this.currentRecording.endTime = new Date().getTime();
     };
 
-    startTimer(duration) {
-        const interval = 1000;
-        let timePassed = 0;
-        this.timerInterval = setInterval(() => {
-            this.setState({
-                songProgress: timePassed + interval,
-            });
-            timePassed = timePassed + interval;
-            if (timePassed > duration) {
-                this.stopPlaying();
-            }
-        }, interval);
-    }
-
     startPlaying = song => {
         this.setState({
             mode: PLAY,
             currentSongId: song._id,
         });
-        this.startTimer(song.duration);
+        this.startPlayTimer(song.duration);
         song.events.forEach(event => {
             this.scheduledEvents.push(
                 setTimeout(() => {
@@ -98,7 +84,7 @@ class App extends React.PureComponent {
                     });
                 }, event.startTime),
                 setTimeout(() => {
-                    const updatedActiveNotes = removeNote(this.state.activeNotes, event.note);
+                    const updatedActiveNotes = removeFromArray(this.state.activeNotes, event.note);
                     this.setState({
                         activeNotes: updatedActiveNotes,
                     });
@@ -115,17 +101,24 @@ class App extends React.PureComponent {
             songProgress: 0,
         });
         clearInterval(this.timerInterval);
-        this.scheduledEvents.forEach(v => clearTimeout(v));
+        this.scheduledEvents.forEach(e => clearTimeout(e));
     };
 
-    onRecordingSave = () => {
-        this.setState({
-            showAddSongModal: false,
-        });
-        this.resetCurrentRecording();
-    };
+    startPlayTimer(duration) {
+        const interval = 1000;
+        let timePassed = 0;
+        this.timerInterval = setInterval(() => {
+            this.setState({
+                songProgress: timePassed + interval,
+            });
+            timePassed = timePassed + interval;
+            if (timePassed > duration) {
+                this.stopPlaying();
+            }
+        }, interval);
+    }
 
-    onRecordingSaveCancel = () => {
+    onAddSongModalClose = () => {
         this.setState({
             showAddSongModal: false,
         });
@@ -154,10 +147,10 @@ class App extends React.PureComponent {
             <div className={appClasses}>
                 <h1>React Piano Task</h1>
                 <Piano
-                    isDisabled={showAddSongModal}
                     onPlayNoteInput={this.onPlayNoteInput}
                     onStopNoteInput={this.onStopNoteInput}
                     activeNotes={activeNotes}
+                    isDisabled={showAddSongModal}
                 />
                 {mode === PLAY ? (
                     <Timer time={songProgress} type="big" />
@@ -177,8 +170,7 @@ class App extends React.PureComponent {
                 {showAddSongModal && (
                     <AddSongModal
                         currentRecording={this.currentRecording}
-                        onSave={this.onRecordingSave}
-                        onCancel={this.onRecordingSaveCancel}
+                        onClose={this.onAddSongModalClose}
                     />
                 )}
                 {isRecording && (

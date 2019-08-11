@@ -20,7 +20,7 @@ const ADD_SONG = gql`
     }
 `;
 
-const AddSongModal = ({ onSave, onCancel, currentRecording }) => {
+const AddSongModal = ({ currentRecording, onClose }) => {
     const [value, setValue] = useState("");
     const [addSong] = useMutation(ADD_SONG);
     const inputEl = useRef(null);
@@ -41,7 +41,7 @@ const AddSongModal = ({ onSave, onCancel, currentRecording }) => {
 
     const cancel = () => {
         setValue("");
-        onCancel();
+        onClose();
     };
 
     const save = () => {
@@ -54,7 +54,7 @@ const AddSongModal = ({ onSave, onCancel, currentRecording }) => {
             },
             refetchQueries: [{ query: GET_SONGS }],
         });
-        onSave();
+        onClose();
     };
 
     return (
@@ -64,9 +64,10 @@ const AddSongModal = ({ onSave, onCancel, currentRecording }) => {
                     ref={inputEl}
                     className="input"
                     type="text"
+                    maxLength={80}
+                    placeholder="Enter song name..."
                     onChange={onChange}
                     onKeyPress={onKeyPress}
-                    placeholder="Enter song name..."
                 />
                 <button className="text-button" onClick={save} disabled={!value.length}>
                     Save
@@ -80,8 +81,7 @@ const AddSongModal = ({ onSave, onCancel, currentRecording }) => {
 };
 
 AddSongModal.propTypes = {
-    onSave: PropTypes.func,
-    onCancel: PropTypes.func,
+    onClose: PropTypes.func,
     currentRecording: PropTypes.object.isRequired,
 };
 

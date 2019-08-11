@@ -24,11 +24,15 @@ export const GET_SONGS = gql`
 const SongsList = ({ onPlay, onStop, currentSongId, isPlayingDisabled }) => {
     const { loading, error, data } = useQuery(GET_SONGS);
 
-    if (loading) return "Loading...";
-    if (error) return `Error! ${error.message}`;
+    if (loading) return <div className="spacing-top">Loading...</div>;
+    if (error) return <div className="spacing-top">Error! {error.message}</div>;
+
+    const songsListClasses = cx("songs-list", {
+        "songs-list--with-items": data.songs && data.songs.length,
+    });
 
     return (
-        <ul className="songs-list">
+        <ul className={songsListClasses}>
             {data.songs &&
                 data.songs.length > 0 &&
                 data.songs.map(song => {
