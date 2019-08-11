@@ -20,8 +20,10 @@
   "dependencies": {
     "@apollo/react-hooks": "^3.0.0",
     "apollo-boost": "^0.4.3",
+    "classnames": "^2.2.6",
     "graphql": "^14.4.2",
     "graphql-tag": "^2.10.1",
+    "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-piano": "^3.1.3",

@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { Piano as ReactPiano, KeyboardShortcuts, MidiNumbers } from "react-piano";
 import SoundfontProvider from "../../SoundfontProvider";
 import "react-piano/dist/styles.css";
@@ -17,7 +18,7 @@ const keyboardShortcuts = KeyboardShortcuts.create({
 });
 
 const Piano = ({ isDisabled, onPlayNoteInput, onStopNoteInput, activeNotes }) => (
-    <div>
+    <div className="spacing-bottom">
         <SoundfontProvider
             instrumentName="acoustic_grand_piano"
             audioContext={audioContext}
@@ -40,5 +41,12 @@ const Piano = ({ isDisabled, onPlayNoteInput, onStopNoteInput, activeNotes }) =>
         />
     </div>
 );
+
+Piano.propTypes = {
+    onPlayNoteInput: PropTypes.func,
+    onStopNoteInput: PropTypes.func,
+    isDisabled: PropTypes.bool,
+    activeNotes: PropTypes.array,
+};
 
 export default Piano;

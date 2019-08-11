@@ -1,12 +1,13 @@
 import React from "react";
-import "./app.scss";
+import cx from "classnames";
 import Piano from "./components/Piano";
 import AddSongModal from "./components/AddSongModal";
 import SongsList from "./components/SongsList";
-import RecordButton from "./uiComponents/RecordButton";
-import Timer from "./uiComponents/Timer";
+import RecordButton from "./components/RecordButton";
+import Timer from "./components/Timer";
 import { removeNote } from "./utils/helpers";
 import { RECORD, PLAY } from "./utils/constants";
+import "./app.scss";
 
 class App extends React.PureComponent {
     constructor(props) {
@@ -121,23 +122,36 @@ class App extends React.PureComponent {
         this.setState({
             showAddSongModal: false,
         });
-        this.currentRecording = {};
+        this.resetCurrentRecording();
     };
 
     onRecordingSaveCancel = () => {
         this.setState({
             showAddSongModal: false,
         });
-        this.currentRecording = {};
+        this.resetCurrentRecording();
+    };
+
+    resetCurrentRecording = () => {
+        this.setState({
+            currentRecording: {
+                events: [],
+                startTime: null,
+                endTime: null,
+            },
+        });
     };
 
     render() {
         const { mode, showAddSongModal, activeNotes, songProgress, currentSongId } = this.state;
 
         const isRecording = mode === RECORD;
+        const appClasses = cx("app", {
+            "app--is-recording": isRecording,
+        });
 
         return (
-            <div className="app">
+            <div className={appClasses}>
                 <h1>React Piano Task</h1>
                 <Piano
                     isDisabled={showAddSongModal}
@@ -146,7 +160,7 @@ class App extends React.PureComponent {
                     activeNotes={activeNotes}
                 />
                 {mode === PLAY ? (
-                    <Timer time={songProgress} />
+                    <Timer time={songProgress} type="big" />
                 ) : (
                     <RecordButton
                         onRecordClick={this.startRecording}
@@ -158,6 +172,7 @@ class App extends React.PureComponent {
                     onPlay={this.startPlaying}
                     onStop={this.stopPlaying}
                     currentSongId={currentSongId}
+                    isPlayingDisabled={isRecording}
                 />
                 {showAddSongModal && (
                     <AddSongModal
@@ -165,6 +180,11 @@ class App extends React.PureComponent {
                         onSave={this.onRecordingSave}
                         onCancel={this.onRecordingSaveCancel}
                     />
+                )}
+                {isRecording && (
+                    <div className="recording-status">
+                        REC <span className="recording-status__icon" />
+                    </div>
                 )}
             </div>
         );

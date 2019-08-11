@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
+import PropTypes from "prop-types";
 import gql from "graphql-tag";
 import { useMutation } from "@apollo/react-hooks";
 import { GET_SONGS } from "../SongsList";
+import "./addSongModal.scss";
 
 const ADD_SONG = gql`
     mutation AddSong($title: String, $events: [EventInput], $duration: Int) {
@@ -56,12 +58,31 @@ const AddSongModal = ({ onSave, onCancel, currentRecording }) => {
     };
 
     return (
-        <div>
-            <input ref={inputEl} type="text" onChange={onChange} onKeyPress={onKeyPress} />
-            <button onClick={save}>Save</button>
-            <button onClick={cancel}>Cancel</button>
+        <div className="add-song-modal">
+            <div className="add-song-modal__inner">
+                <input
+                    ref={inputEl}
+                    className="input"
+                    type="text"
+                    onChange={onChange}
+                    onKeyPress={onKeyPress}
+                    placeholder="Enter song name..."
+                />
+                <button className="text-button" onClick={save} disabled={!value.length}>
+                    Save
+                </button>
+                <button className="text-button text-button--no-border" onClick={cancel}>
+                    Cancel
+                </button>
+            </div>
         </div>
     );
+};
+
+AddSongModal.propTypes = {
+    onSave: PropTypes.func,
+    onCancel: PropTypes.func,
+    currentRecording: PropTypes.object.isRequired,
 };
 
 export default AddSongModal;
