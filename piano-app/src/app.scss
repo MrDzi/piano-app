@@ -1,0 +1,14 @@
+@import "./styles/variables";
+
+.app {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    background-color: $gray_lighter;
+    height: 100%;
+    transition: background-color 0.2s ease-in-out;
+    &--is-recording {
+        background-color: darken($gray_lighter, 10%);
+    }
+}

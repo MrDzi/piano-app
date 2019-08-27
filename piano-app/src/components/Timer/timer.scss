@@ -1,0 +1,10 @@
+@import "../../styles/variables";
+
+.timer {
+    font-weight: 300;
+    color: $gray_dark;
+    &--big {
+        font-size: 44px;
+        height: 52px;
+    }
+};

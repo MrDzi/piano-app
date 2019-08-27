@@ -1,0 +1,5 @@
+module.exports = {
+    RECORD: "RECORD",
+    PLAY: "PLAY",
+    RECORD_BUTTON_INFO_SEEN: "RECORD_BUTTON_INFO_SEEN",
+};

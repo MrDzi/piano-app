@@ -1,0 +1,26 @@
+.button-wrapper {
+    position: relative;
+}
+
+.button-info {
+    display: flex;
+    position: absolute;
+    left: 132%;
+    top: 18px;
+    span {
+        white-space: nowrap;
+        font-weight: 300;
+        text-transform: uppercase;
+        font-size: 14px;
+    }
+    .button-info__arrow {
+        display: block;
+        animation: left-right 1.4s infinite;
+    }
+}
+
+@keyframes left-right {
+    0% { transform: translateX(-2px) }
+    50% { transform: translateX(-8px) }
+    100% { transform: translateX(-2px) }
+}
